@@ -106,3 +106,25 @@ class Renderer:
         p.update_canvas()
 
 
+    def title(self, game):
+        # 오른쪽 도로 미리보기는 배경 위에 실제 오브젝트를 조합한다.
+        self.image('road', 651, 300, 330, 600)
+        self.image('tree', 501, 430, 92, 98)
+        self.image('tree', 790, 170, 92, 98)
+        self.image('barrier', 651, 430, 74, 74)
+        self.image('box', 714, 300, 38, 38)
+        self.truck(640, 179, 5, 1.6)
+        self.text('SPECIAL DELIVERY / 01', 45, 526, 14, ORANGE)
+        self.text('BOX', 42, 452, 56)
+        self.text('RUSH', 42, 391, 56, ORANGE)
+        self.text('박스 러시', 47, 326, 28)
+        self.text('많이 싣고, 끝까지 지켜라.', 48, 270, 22)
+        self.text('3개 구간  ·  90초  ·  목표 200점', 48, 231, 16, MUTED)
+        self.rect(47, 129, 330, 51, (234, 124, 43))
+        self.text('ENTER   배송 시작', 212, 154, 18, NAVY, center=True)
+        self.text('↑ ↓  적재량 선택     ← →  차선 이동', 48, 92, 14, MUTED)
+        self.text('ESC  종료', 48, 59, 14, MUTED)
+        if self.test_mode:
+            self.text('테스트 모드 · 구간 3초', 48, 559, 14, ORANGE)
+
+
