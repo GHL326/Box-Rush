@@ -113,3 +113,25 @@ class Game:
         return max(0.0, self.stage_seconds - self.elapsed)
 
 
+    def command(self, key):
+        if self.state == "title" and key == "enter":
+            self.state = "select"
+        elif self.state == "select":
+            if key == "up":
+                self.selected = min(5, self.selected + 1)
+            elif key == "down":
+                self.selected = max(1, self.selected - 1)
+            elif key == "enter":
+                self.start_stage()
+        elif self.state == "play" and key in ("left", "right"):
+            self.player.move(-1 if key == "left" else 1)
+        elif self.state == "stage_end" and key == "enter":
+            if self.stage == len(STAGES):
+                self.state = "result"
+            else:
+                self.stage += 1
+                self.state = "select"
+        elif self.state == "result" and key == "r":
+            self.reset()
+
+
