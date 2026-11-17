@@ -144,3 +144,14 @@ class Game:
         self.state = "play"
 
 
+    def spawn_obstacle(self):
+        kind = self.rng.choice(tuple(OBSTACLE_SIZES))
+        y = HEIGHT + OBSTACLE_SIZES[kind][1] / 2
+        # 같은 차선의 생성 영역이 비어 있는 경우에만 한 개 생성한다.
+        lanes = [lane for lane in range(3) if all(
+            o.lane != lane or abs(o.y - y) > (OBSTACLE_SIZES[o.kind][1] + OBSTACLE_SIZES[kind][1]) / 2 + 24
+            for o in self.obstacles)]
+        if lanes:
+            self.obstacles.append(Obstacle(self.rng.choice(lanes), kind, y))
+
+
