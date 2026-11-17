@@ -108,3 +108,8 @@ class Game:
         self.last_points = 0
 
 
+    @property
+    def remaining(self):
+        return max(0.0, self.stage_seconds - self.elapsed)
+
+
