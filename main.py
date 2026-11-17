@@ -22,3 +22,39 @@ def handle_events(events, game, api):
     return True
 
 
+def main():
+    parser = argparse.ArgumentParser(description='박스 러시 · Python + pico2d')
+    parser.add_argument('--test-mode', action='store_true', help='구간 시간만 3초로 단축')
+    args = parser.parse_args()
+    import pico2d as p
+    from render import Renderer
+
+    game = Game(stage_seconds=3.0 if args.test_mode else STAGE_SECONDS)
+    view = None
+    p.open_canvas(WIDTH, HEIGHT, sync=True)
+    p.hide_lattice()
+    try:
+        view = Renderer(args.test_mode)
+        previous = time.perf_counter()
+        running = True
+        while running:
+            now = time.perf_counter()
+            dt = now - previous
+            previous = now
+            old_state = game.state
+            running = handle_events(p.get_events(), game, p)
+            if not running:
+                break
+            # 선택 화면에 머문 시간은 새 구간 시간에 포함하지 않는다.
+            if game.state == old_state:
+                game.update(dt)
+            view.draw(game)
+            p.delay(0.001)
+    finally:
+        if view is not None:
+            view.close()
+        p.close_canvas()
+
+
+if __name__ == '__main__':
+    main()
