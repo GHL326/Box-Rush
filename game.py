@@ -82,3 +82,12 @@ class Obstacle:
         return abs(self.x - player.x) < (w + pw) / 2 and abs(self.y - PLAYER_Y) < (h + ph) / 2
 
 
+class Game:
+    def __init__(self, stage_seconds=STAGE_SECONDS, seed=None):
+        if not math.isfinite(stage_seconds) or stage_seconds <= 0:
+            raise ValueError("구간 시간은 양수여야 합니다.")
+        self.stage_seconds = stage_seconds
+        self.rng = random.Random(seed)
+        self.reset()
+
+
