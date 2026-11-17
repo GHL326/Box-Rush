@@ -38,3 +38,21 @@ class Player:
         return True
 
 
+    def update(self, dt):
+        self.invulnerable = max(0.0, self.invulnerable - dt)
+        if self.move_left > 1e-9:
+            used = min(dt, self.move_left)
+            self.move_left = max(0.0, self.move_left - used)
+            t = 1.0 - self.move_left / LANE_CHANGE_SECONDS
+            smooth = t * t * (3 - 2 * t)
+            self.x = self.start_x + (LANES[self.lane] - self.start_x) * smooth
+            if self.move_left <= 1e-9:
+                self.move_left = 0.0
+                self.x = LANES[self.lane]
+                # 이동 완료 시 현재 적재량 기준으로 쿨타임을 시작한다.
+                self.cooldown_period = COOLDOWNS[self.boxes]
+                self.cooldown = max(0.0, self.cooldown_period - (dt - used))
+        else:
+            self.cooldown = max(0.0, self.cooldown - dt)
+
+
