@@ -23,3 +23,8 @@ class Player:
     cooldown_period: float = COOLDOWNS[3]
     invulnerable: float = 0.0
 
+    @property
+    def ready(self):
+        return self.move_left <= 1e-9 and self.cooldown <= 1e-9
+
+
