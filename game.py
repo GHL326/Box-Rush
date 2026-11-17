@@ -28,3 +28,13 @@ class Player:
         return self.move_left <= 1e-9 and self.cooldown <= 1e-9
 
 
+    def move(self, direction):
+        target = self.lane + direction
+        if direction not in (-1, 1) or not self.ready or not 0 <= target < 3:
+            return False
+        self.start_x = self.x
+        self.lane = target
+        self.move_left = LANE_CHANGE_SECONDS
+        return True
+
+
