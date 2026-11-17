@@ -27,7 +27,6 @@ class Player:
     def ready(self):
         return self.move_left <= 1e-9 and self.cooldown <= 1e-9
 
-
     def move(self, direction):
         target = self.lane + direction
         if direction not in (-1, 1) or not self.ready or not 0 <= target < 3:
@@ -36,7 +35,6 @@ class Player:
         self.lane = target
         self.move_left = LANE_CHANGE_SECONDS
         return True
-
 
     def update(self, dt):
         self.invulnerable = max(0.0, self.invulnerable - dt)
@@ -54,7 +52,6 @@ class Player:
                 self.cooldown = max(0.0, self.cooldown_period - (dt - used))
         else:
             self.cooldown = max(0.0, self.cooldown - dt)
-
 
     def hit(self):
         if self.invulnerable > 1e-9:
@@ -75,7 +72,6 @@ class Obstacle:
     def x(self):
         return LANES[self.lane]
 
-
     def collides(self, player):
         w, h = OBSTACLE_HITBOXES[self.kind]
         pw, ph = PLAYER_HITBOX
@@ -89,7 +85,6 @@ class Game:
         self.stage_seconds = stage_seconds
         self.rng = random.Random(seed)
         self.reset()
-
 
     def reset(self):
         self.state = "title"
@@ -107,11 +102,9 @@ class Game:
         self.last_boxes = 0
         self.last_points = 0
 
-
     @property
     def remaining(self):
         return max(0.0, self.stage_seconds - self.elapsed)
-
 
     def command(self, key):
         if self.state == "title" and key == "enter":
@@ -134,7 +127,6 @@ class Game:
         elif self.state == "result" and key == "r":
             self.reset()
 
-
     def start_stage(self):
         self.player = Player(boxes=self.selected, health=self.player.health)
         self.elapsed = 0.0
@@ -142,7 +134,6 @@ class Game:
         self.scroll = 0.0
         self.obstacles.clear()
         self.state = "play"
-
 
     def spawn_obstacle(self):
         kind = self.rng.choice(tuple(OBSTACLE_SIZES))
@@ -154,7 +145,6 @@ class Game:
         if lanes:
             self.obstacles.append(Obstacle(self.rng.choice(lanes), kind, y))
 
-
     def update(self, dt):
         if self.state != "play" or not math.isfinite(dt) or dt <= 0:
             return
@@ -165,7 +155,6 @@ class Game:
             step = min(remaining_dt, 1 / 120)
             self._step(step)
             remaining_dt -= step
-
 
     def _step(self, dt):
         speed, interval = STAGES[self.stage - 1]
@@ -193,4 +182,18 @@ class Game:
         elif self.remaining <= 1e-8:
             self.finish_stage()
 
-
+    def finish_stage(self):
+        if self.state != "play":
+            return
+        self.elapsed = self.stage_seconds
+        self.last_boxes = self.player.boxes
+        self.last_points = self.last_boxes * POINTS_PER_BOX
+        self.score += self.last_points
+        self.history.append((self.stage, self.last_boxes, self.last_points))
+        self.obstacles.clear()
+        self.player.move_left = self.player.cooldown = self.player.invulnerable = 0.0
+        self.player.x = LANES[self.player.lane]
+        self.state = "stage_end"
+        if self.stage == len(STAGES):
+            self.success = self.score >= TARGET_SCORE
+            self.reason = "목표 점수 200점을 달성했습니다!" if self.success else "배송을 마쳤지만 목표 점수에 도달하지 못했습니다."
