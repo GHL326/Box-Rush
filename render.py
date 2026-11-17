@@ -54,3 +54,8 @@ class Renderer:
         font.draw(x, y, str(value), color)
 
 
+    @staticmethod
+    def rect(x, y, w, h, color):
+        p.draw_rectangle(x, y, x + w, y + h, *color, filled=True)
+
+
