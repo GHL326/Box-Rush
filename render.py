@@ -44,7 +44,6 @@ class Renderer:
         self.fonts = {size: p.load_font(font_path, size) for size in (12, 14, 16, 18, 22, 28, 36, 56)}
         self.test_mode = test_mode
 
-
     def text(self, value, x, y, size=18, color=WHITE, center=False):
         font = self.fonts[size]
         if center:
@@ -53,15 +52,12 @@ class Renderer:
             x -= width.value / 2
         font.draw(x, y, str(value), color)
 
-
     @staticmethod
     def rect(x, y, w, h, color):
         p.draw_rectangle(x, y, x + w, y + h, *color, filled=True)
 
-
     def image(self, name, x, y, w=None, h=None):
         self.images[name].draw(x, y, w, h)
-
 
     def truck(self, x, y, boxes, scale=1.0, visible=True):
         if not visible:
@@ -71,7 +67,6 @@ class Renderer:
         positions = [(-10, 4), (10, 4), (-10, -15), (10, -15), (0, -34)]
         for dx, dy in positions[:boxes]:
             self.image('box', x + dx * scale, y + dy * scale, 18 * scale, 18 * scale)
-
 
     def scenery(self, scroll=0):
         offset = scroll % 600
@@ -84,17 +79,14 @@ class Renderer:
             self.image('cone', 124, y + 90, 24, 30)
             self.image('cone', 683, y + 12, 24, 30)
 
-
     def footer(self, text='ESC  종료'):
         self.text(text, 400, 28, 14, MUTED, center=True)
         if self.test_mode:
             self.text('테스트 모드 · 구간 3초', 400, 575, 14, ORANGE, center=True)
 
-
     def button(self, text, y=126):
         self.rect(230, y - 25, 340, 50, (234, 124, 43))
         self.text(text, 400, y, 18, NAVY, center=True)
-
 
     def draw(self, game):
         p.clear_canvas()
@@ -104,7 +96,6 @@ class Renderer:
             self.image('ui_background', 400, 300, 800, 600)
             getattr(self, game.state)(game)
         p.update_canvas()
-
 
     def title(self, game):
         # 오른쪽 도로 미리보기는 배경 위에 실제 오브젝트를 조합한다.
@@ -127,7 +118,6 @@ class Renderer:
         if self.test_mode:
             self.text('테스트 모드 · 구간 3초', 48, 559, 14, ORANGE)
 
-
     def select(self, game):
         self.image('panel', 400, 310, 650, 470)
         self.text(f'DELIVERY 0{game.stage} / 03', 400, 508, 14, ORANGE, True)
@@ -141,7 +131,6 @@ class Renderer:
         self.text('상자가 많을수록 차선을 다시 바꾸기까지 오래 걸립니다.', 400, 173, 14, MUTED, True)
         self.button('ENTER   적재 완료 · 출발', 117)
         self.footer()
-
 
     def play(self, game):
         self.scenery(game.scroll)
@@ -180,7 +169,6 @@ class Renderer:
         if self.test_mode:
             self.text('테스트 · 3초', 28, 506, 12, ORANGE)
 
-
     def stage_end(self, game):
         self.image('panel', 400, 311, 650, 470)
         self.text(f'DELIVERY 0{game.stage} COMPLETE', 400, 505, 14, ORANGE, True)
@@ -193,7 +181,6 @@ class Renderer:
         label = 'ENTER   최종 결과 보기' if game.stage == 3 else 'ENTER   다음 구간 준비'
         self.button(label, 124)
         self.footer()
-
 
     def result(self, game):
         self.image('panel', 400, 311, 650, 470)
@@ -212,4 +199,9 @@ class Renderer:
         self.button('R   처음부터 다시 시작', 119)
         self.footer()
 
-
+    def close(self):
+        # SDL 종료 전에 텍스처/폰트를 해제한다.
+        self.images.clear()
+        for font in self.fonts.values():
+            p.TTF_CloseFont(font.font)
+        self.fonts.clear()
