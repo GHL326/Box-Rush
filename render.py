@@ -36,3 +36,12 @@ def find_font():
     raise FileNotFoundError('한글 폰트를 찾지 못했습니다. BOX_RUSH_FONT 환경 변수에 한글 TTF/OTF 경로를 지정하세요.')
 
 
+class Renderer:
+    def __init__(self, test_mode=False):
+        self.images = {name: p.load_image(str(ROOT / 'resources' / f'{name}.png'))
+                       for name in ('road', 'truck', 'box', 'barrier', 'tree', 'cone', 'panel', 'ui_background')}
+        font_path = find_font()
+        self.fonts = {size: p.load_font(font_path, size) for size in (12, 14, 16, 18, 22, 28, 36, 56)}
+        self.test_mode = test_mode
+
+
