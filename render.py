@@ -143,3 +143,41 @@ class Renderer:
         self.footer()
 
 
+    def play(self, game):
+        self.scenery(game.scroll)
+        for obstacle in game.obstacles:
+            self.image(obstacle.kind, obstacle.x, obstacle.y, *OBSTACLE_SIZES[obstacle.kind])
+        player = game.player
+        visible = player.invulnerable <= 0 or int(player.invulnerable * 12) % 2 == 0
+        self.truck(player.x, PLAYER_Y, player.boxes, visible=visible)
+        # HUD는 도로의 위/아래에만 위치한다.
+        self.rect(0, 526, 800, 74, NAVY)
+        self.rect(0, 524, 800, 2, (226, 131, 58))
+        self.text(f'구간 0{game.stage} / 03', 28, 566, 22)
+        self.text(f'{math.ceil(game.remaining):02d}초', 400, 566, 28, ORANGE, True)
+        self.text(f'{game.score:03d} / {TARGET_SCORE}점', 603, 566, 22)
+        self.rect(25, 535, 750, 4, (49, 67, 85))
+        self.rect(25, 535, 750 * game.remaining / game.stage_seconds, 4, (239, 150, 67))
+        self.rect(0, 0, 800, 76, NAVY)
+        self.text('내구도', 24, 49, 14, MUTED)
+        for i in range(INITIAL_HEALTH):
+            self.rect(83 + i * 23, 42, 16, 14, GREEN if i < player.health else (54, 65, 81))
+        self.image('box', 221, 48, 23, 23)
+        self.text(f'{player.boxes}개', 242, 48, 22)
+        self.text(f'배송 예상 +{player.boxes * POINTS_PER_BOX}점', 207, 19, 12, MUTED)
+        if player.move_left > 0:
+            label, color = '차선 이동 중', ORANGE
+        elif not player.ready:
+            label, color = f'대기  {player.cooldown:.2f}초', ORANGE
+        else:
+            label, color = '차선 변경 가능', GREEN
+        self.text(label, 390, 48, 18, color)
+        fraction = 1.0 if player.ready else (0.0 if player.move_left else 1 - player.cooldown / player.cooldown_period)
+        self.rect(390, 20, 180, 5, (49, 67, 85))
+        self.rect(390, 20, max(0, min(1, fraction)) * 180, 5, color)
+        self.text('← →  차선 이동', 643, 48, 14, MUTED)
+        self.text('ESC  종료', 643, 21, 12, MUTED)
+        if self.test_mode:
+            self.text('테스트 · 3초', 28, 506, 12, ORANGE)
+
+
