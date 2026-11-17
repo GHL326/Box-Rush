@@ -167,3 +167,30 @@ class Game:
             remaining_dt -= step
 
 
+    def _step(self, dt):
+        speed, interval = STAGES[self.stage - 1]
+        self.player.update(dt)
+        self.elapsed = min(self.stage_seconds, self.elapsed + dt)
+        self.scroll = (self.scroll + speed * dt) % HEIGHT
+        self.spawn_elapsed += dt
+        for obstacle in self.obstacles:
+            obstacle.y -= speed * dt
+        if self.spawn_elapsed + 1e-9 >= interval:
+            self.spawn_elapsed -= interval
+            self.spawn_obstacle()
+        survivors = []
+        for obstacle in self.obstacles:
+            if obstacle.collides(self.player):
+                self.player.hit()
+                # 접촉한 장애물은 제거해 무적 종료 후 중복 피격을 막는다.
+            elif obstacle.y + OBSTACLE_SIZES[obstacle.kind][1] / 2 >= 0:
+                survivors.append(obstacle)
+        self.obstacles = survivors
+        if self.player.health == 0:
+            self.success = False
+            self.reason = "차량 내구도가 모두 소진되었습니다."
+            self.state = "result"
+        elif self.remaining <= 1e-8:
+            self.finish_stage()
+
+
