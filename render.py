@@ -128,3 +128,18 @@ class Renderer:
             self.text('테스트 모드 · 구간 3초', 48, 559, 14, ORANGE)
 
 
+    def select(self, game):
+        self.image('panel', 400, 310, 650, 470)
+        self.text(f'DELIVERY 0{game.stage} / 03', 400, 508, 14, ORANGE, True)
+        self.text('이번 구간, 얼마나 실을까요?', 400, 464, 28, center=True)
+        self.text(f'누적 {game.score}점   ·   내구도 {game.player.health}/{INITIAL_HEALTH}', 400, 423, 16, MUTED, True)
+        self.truck(238, 302, game.selected, 1.6)
+        self.text(f'{game.selected}개', 482, 354, 56, ORANGE, True)
+        self.text('↑  늘리기      ↓  줄이기', 482, 299, 16, MUTED, True)
+        self.text(f'최대 점수     {game.selected * POINTS_PER_BOX}점', 381, 250, 18)
+        self.text(f'변경 쿨타임   {COOLDOWNS[game.selected]:g}초', 381, 216, 18)
+        self.text('상자가 많을수록 차선을 다시 바꾸기까지 오래 걸립니다.', 400, 173, 14, MUTED, True)
+        self.button('ENTER   적재 완료 · 출발', 117)
+        self.footer()
+
+
