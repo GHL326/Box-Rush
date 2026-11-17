@@ -181,3 +181,17 @@ class Renderer:
             self.text('테스트 · 3초', 28, 506, 12, ORANGE)
 
 
+    def stage_end(self, game):
+        self.image('panel', 400, 311, 650, 470)
+        self.text(f'DELIVERY 0{game.stage} COMPLETE', 400, 505, 14, ORANGE, True)
+        self.text(f'{game.stage}구간 배송 완료', 400, 460, 36, center=True)
+        for i in range(game.last_boxes):
+            self.image('box', 400 + (i - (game.last_boxes - 1) / 2) * 51, 385, 42, 42)
+        self.text(f'남은 상자 {game.last_boxes}개 × 20점', 400, 331, 18, MUTED, True)
+        self.text(f'+{game.last_points}점', 400, 275, 56, ORANGE, True)
+        self.text(f'현재 누적 점수  {game.score} / {TARGET_SCORE}점', 400, 214, 22, center=True)
+        label = 'ENTER   최종 결과 보기' if game.stage == 3 else 'ENTER   다음 구간 준비'
+        self.button(label, 124)
+        self.footer()
+
+
