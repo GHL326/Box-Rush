@@ -56,3 +56,12 @@ class Player:
             self.cooldown = max(0.0, self.cooldown - dt)
 
 
+    def hit(self):
+        if self.invulnerable > 1e-9:
+            return False
+        self.health = max(0, self.health - 1)
+        self.boxes = max(0, self.boxes - 1)
+        self.invulnerable = INVULNERABLE_SECONDS
+        return True
+
+
