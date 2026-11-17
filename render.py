@@ -45,3 +45,12 @@ class Renderer:
         self.test_mode = test_mode
 
 
+    def text(self, value, x, y, size=18, color=WHITE, center=False):
+        font = self.fonts[size]
+        if center:
+            width, height = ctypes.c_int(), ctypes.c_int()
+            TTF_SizeUTF8(font.font, str(value).encode('utf-8'), ctypes.byref(width), ctypes.byref(height))
+            x -= width.value / 2
+        font.draw(x, y, str(value), color)
+
+
