@@ -135,3 +135,12 @@ class Game:
             self.reset()
 
 
+    def start_stage(self):
+        self.player = Player(boxes=self.selected, health=self.player.health)
+        self.elapsed = 0.0
+        self.spawn_elapsed = 0.0
+        self.scroll = 0.0
+        self.obstacles.clear()
+        self.state = "play"
+
+
