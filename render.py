@@ -21,3 +21,18 @@ RED = (255, 130, 115)
 NAVY = (16, 31, 49)
 
 
+def find_font():
+    candidates = [
+        os.environ.get('BOX_RUSH_FONT', ''),
+        str(ROOT / 'resources' / 'font.ttf'),
+        str(Path(os.environ.get('WINDIR', 'C:/Windows')) / 'Fonts' / 'malgun.ttf'),
+        '/usr/share/fonts/truetype/nanum/NanumGothic.ttf',
+        '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc',
+        '/System/Library/Fonts/AppleSDGothicNeo.ttc',
+    ]
+    for candidate in candidates:
+        if candidate and Path(candidate).is_file():
+            return candidate
+    raise FileNotFoundError('한글 폰트를 찾지 못했습니다. BOX_RUSH_FONT 환경 변수에 한글 TTF/OTF 경로를 지정하세요.')
+
+
