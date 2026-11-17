@@ -85,3 +85,9 @@ class Renderer:
             self.image('cone', 683, y + 12, 24, 30)
 
 
+    def footer(self, text='ESC  종료'):
+        self.text(text, 400, 28, 14, MUTED, center=True)
+        if self.test_mode:
+            self.text('테스트 모드 · 구간 3초', 400, 575, 14, ORANGE, center=True)
+
+
