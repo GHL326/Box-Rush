@@ -76,3 +76,9 @@ class Obstacle:
         return LANES[self.lane]
 
 
+    def collides(self, player):
+        w, h = OBSTACLE_HITBOXES[self.kind]
+        pw, ph = PLAYER_HITBOX
+        return abs(self.x - player.x) < (w + pw) / 2 and abs(self.y - PLAYER_Y) < (h + ph) / 2
+
+
