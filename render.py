@@ -73,3 +73,15 @@ class Renderer:
             self.image('box', x + dx * scale, y + dy * scale, 18 * scale, 18 * scale)
 
 
+    def scenery(self, scroll=0):
+        offset = scroll % 600
+        self.image('road', 400, 300 - offset, 800, 600)
+        self.image('road', 400, 900 - offset, 800, 600)
+        for index in range(4):
+            y = (index * 210 - scroll * 0.8) % 840 - 100
+            self.image('tree', 62, y, 100, 106)
+            self.image('tree', 738, y + 90, 100, 106)
+            self.image('cone', 124, y + 90, 24, 30)
+            self.image('cone', 683, y + 12, 24, 30)
+
+
