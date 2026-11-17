@@ -155,3 +155,15 @@ class Game:
             self.obstacles.append(Obstacle(self.rng.choice(lanes), kind, y))
 
 
+    def update(self, dt):
+        if self.state != "play" or not math.isfinite(dt) or dt <= 0:
+            return
+        # 긴 프레임에서도 충돌을 건너뛰지 않도록 시간을 작은 단위로 나눈다.
+        # dt를 버리지 않으므로 정상 플레이는 실제 경과 시간으로 30초이다.
+        remaining_dt = min(dt, self.remaining)
+        while remaining_dt > 1e-10 and self.state == "play":
+            step = min(remaining_dt, 1 / 120)
+            self._step(step)
+            remaining_dt -= step
+
+
