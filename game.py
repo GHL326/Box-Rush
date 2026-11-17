@@ -91,3 +91,20 @@ class Game:
         self.reset()
 
 
+    def reset(self):
+        self.state = "title"
+        self.stage = 1
+        self.selected = 3
+        self.score = 0
+        self.elapsed = 0.0
+        self.spawn_elapsed = 0.0
+        self.scroll = 0.0
+        self.player = Player()
+        self.obstacles = []
+        self.history = []
+        self.success = False
+        self.reason = ""
+        self.last_boxes = 0
+        self.last_points = 0
+
+
