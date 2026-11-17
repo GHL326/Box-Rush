@@ -91,3 +91,8 @@ class Renderer:
             self.text('테스트 모드 · 구간 3초', 400, 575, 14, ORANGE, center=True)
 
 
+    def button(self, text, y=126):
+        self.rect(230, y - 25, 340, 50, (234, 124, 43))
+        self.text(text, 400, y, 18, NAVY, center=True)
+
+
