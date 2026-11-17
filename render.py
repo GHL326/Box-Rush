@@ -96,3 +96,13 @@ class Renderer:
         self.text(text, 400, y, 18, NAVY, center=True)
 
 
+    def draw(self, game):
+        p.clear_canvas()
+        if game.state == 'play':
+            self.play(game)
+        else:
+            self.image('ui_background', 400, 300, 800, 600)
+            getattr(self, game.state)(game)
+        p.update_canvas()
+
+
