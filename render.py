@@ -63,3 +63,13 @@ class Renderer:
         self.images[name].draw(x, y, w, h)
 
 
+    def truck(self, x, y, boxes, scale=1.0, visible=True):
+        if not visible:
+            return
+        self.image('truck', x, y, PLAYER_SIZE[0] * scale, PLAYER_SIZE[1] * scale)
+        # 2열 3행으로 배치해 0~5개의 적재량을 실제 스프라이트로 표현한다.
+        positions = [(-10, 4), (10, 4), (-10, -15), (10, -15), (0, -34)]
+        for dx, dy in positions[:boxes]:
+            self.image('box', x + dx * scale, y + dy * scale, 18 * scale, 18 * scale)
+
+
