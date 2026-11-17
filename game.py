@@ -11,3 +11,15 @@ from config import (
 )
 
 
+@dataclass
+class Player:
+    x: float = LANES[1]
+    lane: int = 1
+    boxes: int = 3
+    health: int = INITIAL_HEALTH
+    move_left: float = 0.0
+    start_x: float = LANES[1]
+    cooldown: float = 0.0
+    cooldown_period: float = COOLDOWNS[3]
+    invulnerable: float = 0.0
+
