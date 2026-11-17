@@ -71,3 +71,8 @@ class Obstacle:
     kind: str
     y: float
 
+    @property
+    def x(self):
+        return LANES[self.lane]
+
+
