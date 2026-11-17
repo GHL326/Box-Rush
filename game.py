@@ -65,3 +65,9 @@ class Player:
         return True
 
 
+@dataclass
+class Obstacle:
+    lane: int
+    kind: str
+    y: float
+
