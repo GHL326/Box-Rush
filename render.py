@@ -59,3 +59,7 @@ class Renderer:
         p.draw_rectangle(x, y, x + w, y + h, *color, filled=True)
 
 
+    def image(self, name, x, y, w=None, h=None):
+        self.images[name].draw(x, y, w, h)
+
+
