@@ -195,3 +195,21 @@ class Renderer:
         self.footer()
 
 
+    def result(self, game):
+        self.image('panel', 400, 311, 650, 470)
+        color = GREEN if game.success else ORANGE
+        self.text('DELIVERY REPORT', 400, 504, 14, color, True)
+        self.text('배송 성공!' if game.success else '배송 실패', 400, 453, 36, color, True)
+        self.text(f'{game.score}점', 400, 381, 56, center=True)
+        self.text(game.reason, 400, 324, 16, MUTED, True)
+        self.text('구간                 배송 상자                 획득 점수', 400, 276, 14, MUTED, True)
+        for row, (stage, boxes, points) in enumerate(game.history):
+            self.text(f'{stage}구간', 215, 244 - row * 29, 16)
+            self.text(f'{boxes}개', 394, 244 - row * 29, 16)
+            self.text(f'{points}점', 544, 244 - row * 29, 16)
+        if not game.history:
+            self.text('완료한 구간이 없습니다.', 400, 229, 16, MUTED, True)
+        self.button('R   처음부터 다시 시작', 119)
+        self.footer()
+
+
